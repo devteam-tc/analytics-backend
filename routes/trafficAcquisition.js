@@ -5,7 +5,7 @@ const { validateDateParams, buildAnalyticsRequest, processResponseRows } = requi
 module.exports = (analyticsDataClient, propertyId) => {
   router.get('/', async (req, res) => {
     try {
-      let { startDate, endDate, dimension = 'sessionSource', filter, metrics } = req.query;
+      let { startDate, endDate, dimensions, filter, metrics } = req.query;
       // Default to last 28 days if no startDate or endDate is provided
       if (!startDate || !endDate) {
         const today = new Date(); // Use current date dynamically
@@ -15,17 +15,31 @@ module.exports = (analyticsDataClient, propertyId) => {
         endDate = today.toISOString().slice(0, 10);
       }
       validateDateParams(startDate, endDate);
-      // Default metrics for traffic acquisition
-      const defaultMetrics = ['sessions', 'activeUsers', 'engagedSessions', 'engagementRate', 'eventCount', 'bounceRate'];
-      const metricsArr = metrics ? metrics.split(',') : defaultMetrics;
-      const dimensionsArr = [dimension];
+      // Default metrics for traffic acquisition (as requested)
+      const defaultMetrics = [
+        'totalUsers',
+        'newUsers',
+        'engagedSessions',
+        'averageSessionDuration',
+        'eventCount',
+        'keyEvents'
+      ];
+      // Always include all default metrics, even if custom ones are provided
+      let metricsArr = metrics ? Array.from(new Set([...metrics.split(','), ...defaultMetrics])) : defaultMetrics;
+      // Default dimensions: pagePath, pageTitle, and sessionSource
+      let dimensionsArr = dimensions ? Array.from(new Set([...dimensions.split(','), 'pagePath', 'pageTitle', 'sessionSource'])) : ['pagePath', 'pageTitle', 'sessionSource'];
       
       let dimensionFilter;
       if (filter) {
-        const [key, value] = filter.split('=');
-        dimensionFilter = {
-          filter: { fieldName: dimension, stringFilter: { value } }
-        };
+        // Support filtering on any dimension
+        const filters = {};
+        filter.split(',').forEach(f => {
+          const [key, value] = f.split('=');
+          if (key && value) filters[key] = value;
+        });
+        if (Object.keys(filters).length > 0) {
+          dimensionFilter = require('../utils/helpers').createDimensionFilter(filters);
+        }
       }
       
       const [response] = await analyticsDataClient.runReport(
