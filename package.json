@@ -1,0 +1,19 @@
+{
+  "name": "analytics-backend",
+  "version": "1.0.0",
+  "main": "analytics.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "nodemon analytics.js"
+  },
+  "dependencies": {
+    "@google-analytics/data": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": "18"
+  }
+}

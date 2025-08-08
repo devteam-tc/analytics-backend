@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Backend API</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .endpoint {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #007acc;
+        }
+        .method {
+            font-weight: bold;
+            color: #007acc;
+        }
+        .url {
+            font-family: monospace;
+            background: #e8e8e8;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        .status {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .status.ok {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.api {
+            background: #cce5ff;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Analytics Backend API</h1>
+        <p>A Node.js Express server providing Google Analytics data through REST API endpoints.</p>
+    </div>
+
+    <h2>Available Endpoints</h2>
+
+    <div class="endpoint">
+        <div class="method">GET</div>
+        <div class="url">/health</div>
+        <div class="status ok">Health Check</div>
+        <p>Check if the API is running properly.</p>
+        <p><strong>Response:</strong> JSON with status and timestamp</p>
+    </div>
+
+    <div class="endpoint">
+        <div class="method">GET</div>
+        <div class="url">/api/analytics?period=day|week|month</div>
+        <div class="status api">Analytics Data</div>
+        <p>Get Google Analytics data for the specified time period.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code>period</code> - Time period: <code>day</code>, <code>week</code>, or <code>month</code></li>
+        </ul>
+        <p><strong>Response:</strong> Array of analytics data with dates and user counts</p>
+    </div>
+
+    <h2>Example Usage</h2>
+    <pre><code># Health check
+curl https://your-project-id.web.app/health
+
+# Get analytics for the last week
+curl https://your-project-id.web.app/api/analytics?period=week
+
+# Get analytics for the last month
+curl https://your-project-id.web.app/api/analytics?period=month</code></pre>
+
+    <h2>Response Format</h2>
+    <pre><code>[
+  {
+    "date": "20231201",
+    "users": "123"
+  },
+  {
+    "date": "20231202", 
+    "users": "145"
+  }
+]</code></pre>
+
+    <footer style="margin-top: 3rem; text-align: center; color: #666;">
+        <p>Deployed on Firebase Cloud Functions</p>
+    </footer>
+</body>
+</html> 
