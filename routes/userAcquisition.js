@@ -106,5 +106,5 @@ module.exports = (analyticsDataClient, propertyId) => {
       res.status(500).json({ error: err.message, details: err.details || null });
     }
   });
-  return router;
+  return router; 
 };

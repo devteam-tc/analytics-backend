@@ -14,7 +14,7 @@ const getConfig = () => {
       propertyId: process.env.GA_PROPERTY_ID,
       keyPath: process.env.GA_KEY_PATH
     };
-  }
+  } 
 };
 
 module.exports = { getConfig }; 
