@@ -180,7 +180,7 @@ module.exports = (analyticsDataClient, propertyId) => {
   router.get('/page-title-analytics', async (req, res) => {
     try {
       const { startDate = '2024-03-01', endDate = 'today' } = req.query;
-      const metrics = ['screenPageViews', 'activeUsers', 'eventCount', 'bounceRate'];
+      const metrics = ['screenPageViews', 'activeUsers', 'eventCount', 'bounceRate', 'userEngagementDuration'];
       const dimensions = ['pageTitle'];
       const [response] = await analyticsDataClient.runReport(
         buildAnalyticsRequest(propertyId, startDate, endDate, metrics, dimensions)
@@ -195,7 +195,9 @@ module.exports = (analyticsDataClient, propertyId) => {
           eventCount: parseInt(row.metricValues[2].value),
           bounceRate: parseFloat(row.metricValues[3].value),
           bounceRateFormatted: (parseFloat(row.metricValues[3].value) * 100).toFixed(1) + '%',
-          viewsPerActiveUser: activeUsers > 0 ? +(views / activeUsers).toFixed(2) : 0
+          viewsPerActiveUser: activeUsers > 0 ? +(views / activeUsers).toFixed(2) : 0,
+          avgEngagementTimePerUser: activeUsers > 0 ? 
+            Math.round(parseFloat(row.metricValues[4].value) / activeUsers) : 0
         };
       });
       // Sort descending by views
