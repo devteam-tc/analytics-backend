@@ -2,6 +2,19 @@ const express = require('express');
 const router = express.Router();
 const { validateDateParams, buildAnalyticsRequest, processResponseRows } = require('../utils/helpers');
 
+// Common traffic sources to track in the summary
+const COMMON_SOURCES = [
+  'google',
+  'facebook',
+  'direct',
+  'organic',
+  'referral',
+  'email',
+  'social',
+  'localhost',
+  '(not set)'
+];
+
 module.exports = (analyticsDataClient, propertyId) => {
   router.get('/', async (req, res) => {
     try {
@@ -54,9 +67,56 @@ module.exports = (analyticsDataClient, propertyId) => {
         totals[metric] = result.reduce((sum, row) => sum + (parseFloat(row[metric]) || 0), 0);
       });
 
+      // Generate traffic source summary
+      const summary = { total: { ...totals } };
+      
+      // Initialize all common sources with zero values
+      COMMON_SOURCES.forEach(source => {
+        summary[source] = metricsArr.reduce((acc, metric) => {
+          acc[metric] = 0;
+          return acc;
+        }, {});
+      });
+      
+      // Aggregate metrics by source
+      result.forEach(row => {
+        const source = (row.sessionSource || '').toLowerCase();
+        const targetSource = COMMON_SOURCES.find(s => source.includes(s)) || 'other';
+        
+        if (!summary[targetSource]) {
+          summary[targetSource] = metricsArr.reduce((acc, metric) => {
+            acc[metric] = 0;
+            return acc;
+          }, {});
+        }
+        
+        metricsArr.forEach(metric => {
+          if (row[metric]) {
+            summary[targetSource][metric] = (summary[targetSource][metric] || 0) + (parseFloat(row[metric]) || 0);
+          }
+        });
+      });
+      
+      // Convert to array and sort by totalUsers descending
+      const summaryArray = Object.entries(summary)
+        .map(([source, metrics]) => ({
+          source: source === 'total' ? 'Total' : source.charAt(0).toUpperCase() + source.slice(1),
+          ...metrics
+        }))
+        .sort((a, b) => b.totalUsers - a.totalUsers);
+      
+      // Take top 8 + total
+      const topSources = [
+        ...summaryArray.filter(item => item.source === 'Total'),
+        ...summaryArray
+          .filter(item => item.source !== 'Total')
+          .slice(0, 7)
+      ];
+      
       res.json({
         rows: result,
-        totals
+        totals,
+        summary: topSources
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
