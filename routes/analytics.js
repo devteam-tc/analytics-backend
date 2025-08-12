@@ -185,15 +185,51 @@ module.exports = (analyticsDataClient, propertyId) => {
       const [response] = await analyticsDataClient.runReport(
         buildAnalyticsRequest(propertyId, startDate, endDate, metrics, dimensions)
       );
-      const result = response.rows.map(row => ({
-        pageTitle: row.dimensionValues[0].value,
-        views: parseInt(row.metricValues[0].value),
-        activeUsers: parseInt(row.metricValues[1].value),
-        eventCount: parseInt(row.metricValues[2].value),
-        bounceRate: parseFloat(row.metricValues[3].value)
-      }));
+      const result = response.rows.map(row => {
+        const views = parseInt(row.metricValues[0].value);
+        const activeUsers = parseInt(row.metricValues[1].value);
+        return {
+          pageTitle: row.dimensionValues[0].value,
+          views,
+          activeUsers,
+          eventCount: parseInt(row.metricValues[2].value),
+          bounceRate: parseFloat(row.metricValues[3].value),
+          bounceRateFormatted: (parseFloat(row.metricValues[3].value) * 100).toFixed(1) + '%',
+          viewsPerActiveUser: activeUsers > 0 ? +(views / activeUsers).toFixed(2) : 0
+        };
+      });
       // Sort descending by views
       result.sort((a, b) => b.views - a.views);
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Country-wise active users endpoint
+  router.get('/country-active-users', async (req, res) => {
+    try {
+      let { startDate, endDate } = req.query;
+      // By default, use yesterday for both if not provided
+      if (!startDate && !endDate) {
+        const yesterday = formatDateOffset(new Date(), 0);
+        startDate = yesterday;
+        endDate = yesterday;
+      } else if (startDate && !endDate) {
+        endDate = startDate;
+      } else if (!startDate && endDate) {
+        startDate = endDate;
+      }
+      const metrics = ['activeUsers'];
+      const dimensions = ['country'];
+      const [response] = await analyticsDataClient.runReport(
+        buildAnalyticsRequest(propertyId, startDate, endDate, metrics, dimensions)
+      );
+      const result = response.rows.map(row => ({
+        country: row.dimensionValues[0].value,
+        activeUsers: parseInt(row.metricValues[0].value)
+      })).sort((a, b) => b.activeUsers - a.activeUsers);
       res.json(result);
     } catch (err) {
       console.error(err);
