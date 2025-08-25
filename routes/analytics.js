@@ -9,31 +9,33 @@ const {
 } = require('../utils/helpers');
 
 module.exports = (analyticsDataClient, propertyId) => {
-  // User activity summary endpoint
+  // User activity summary endpoint with custom date range
   router.get('/user-activity-summary', async (req, res) => {
     try {
-      const now = new Date();
-      const ranges = [
-        { name: '6m', startDate: formatDateOffset(now, -6) },
-        { name: '3m', startDate: formatDateOffset(now, -3) },
-        { name: '1m', startDate: formatDateOffset(now, -1) }
-      ];
-
-      const results = {};
-      for (const range of ranges) {
-        const [response] = await analyticsDataClient.runReport(
-          buildAnalyticsRequest(propertyId, range.startDate, 'today', ['activeUsers'], ['date'])
-        );
-        results[range.name] = processResponseRows(response.rows, ['activeUsers'], ['date'])
-          .map(row => ({ date: row.date, activeUsers: parseInt(row.activeUsers) }))
-          .sort((a, b) => a.date.localeCompare(b.date));
+      const { startDate, endDate = 'today' } = req.query;
+      
+      if (!startDate) {
+        return res.status(400).json({ error: 'startDate query parameter is required' });
       }
 
-      res.json({
-        '6m': results['6m'],
-        '3m': results['3m'],
-        '1m': results['1m'],
-      });
+      // Validate date format (YYYY-MM-DD)
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!dateRegex.test(startDate) || (endDate !== 'today' && !dateRegex.test(endDate))) {
+        return res.status(400).json({ error: 'Dates must be in YYYY-MM-DD format' });
+      }
+
+      const [response] = await analyticsDataClient.runReport(
+        buildAnalyticsRequest(propertyId, startDate, endDate, ['activeUsers'], ['date'])
+      );
+      
+      const activityData = processResponseRows(response.rows, ['activeUsers'], ['date'])
+        .map(row => ({
+          date: row.date,
+          activeUsers: parseInt(row.activeUsers)
+        }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      res.json(activityData);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
