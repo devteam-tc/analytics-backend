@@ -42,12 +42,21 @@ module.exports = (analyticsDataClient, propertyId) => {
     }
   });
 
-  // Totals endpoint
+  // Totals endpoint with custom date range
   router.get('/totals', async (req, res) => {
     try {
+      const { startDate = '2024-03-01', endDate = 'today' } = req.query;
       const metrics = ['screenPageViews', 'totalUsers', 'sessions', 'eventCount'];
+      
+      // Validate date format (YYYY-MM-DD)
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if ((startDate !== '2024-03-01' && !dateRegex.test(startDate)) || 
+          (endDate !== 'today' && !dateRegex.test(endDate))) {
+        return res.status(400).json({ error: 'Dates must be in YYYY-MM-DD format' });
+      }
+
       const [response] = await analyticsDataClient.runReport(
-        buildAnalyticsRequest(propertyId, '2024-03-01', 'today', metrics, [])
+        buildAnalyticsRequest(propertyId, startDate, endDate, metrics, [])
       );
 
       const row = response.rows?.[0]?.metricValues || [];
