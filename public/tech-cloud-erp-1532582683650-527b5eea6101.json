@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "tech-cloud-erp-1532582683650",
+  "private_key_id": "527b5eea6101c7a9b74cffd7c7389def56d41d02",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2V8/opu/Mg0Dj\n+ZFDQt8JzHHuRqY2VXSV4nalC2x7t21qIHcrXYO0hh+VRwC4LJPHaQeEDOYpsm4B\nRL4CkiF6EA822i+GnTwUg/Y1GXV3BGQ2IZPtlaEQ81ji078/QLPBwtiGsOntI6X8\naL0vkTg06ypPdkEMW0DkHuzpPyXxPY7yNgmF73dJoruPnurjHRgRwphPVkCdlu4V\ndnwAUMc9XaDOqW4KUdFFHClxFoph2osxmpevJZ5+bODHoextynDKWg0rfTTV0p6v\nrJQFDnkkci8JXVOQqPwo0b6Pt9/7+qq4QVPNAYAyAyjuKqASix9jHp2+qqgbheu+\n9YLLLFHBAgMBAAECggEAATY23rfoij9dbaBsjf3oXpvE/m9qMoxthhMZXNAdR0qT\nHcpXwWY9ijwtkr3cNhUfgarXvLmjWE/IB+6QjNLC2cFYYQno2MIj7nrYpp5f2b/J\n8NNG/OxOi97Son4D0HJEGY2jd8xuXwvagiGR74plfUJKc4kMnk3vUc7H7jZEAMEQ\nHIeNh2l2zgQ8y8Ke8q9YTKrYzPwJitdQoHi0f0oS/9KdHuoRxDlHY76SvzeMs0cl\n6/VgnceJiGSTGT2S8okMrN4VaYoQfKDzGcigRhNfRZYnwpBB1CLJMj7ATLCVZ2aG\nyW/EaUHqg59tZUp/ZPAsk4L5Qjb9/5XIto9HmWxgIQKBgQD1HQBuGuScaL9QYLDo\nhm4rrxByhVIeLQVCwpXc3txOFIxmqAhD2shQMU8Q29jCGuNL0iv2Ky1cl0hl+ZQ0\n+Pq/CnEJ6BzQGrqAA68wQkVnPi7I5KwvtBiykleaWUpNHvMsxeo3iyeOVDdS/an4\n+80dar6QxOw6nWO9Jgk7OTBr4QKBgQC+cRjYOEII5xJxFLY7DP6T6o3e1uCc2Da6\nWJQeCoHziPbg+WxleMgqYiCajWOYqFVzqPNC/dO9w+K1JCxa1XL5v1Ey8t0B7I+U\n2GsNRjLoAdJp2owQCBDo3C3i7exaK2lJB9rFw7BPMQ7HD7McpbyMUmM8IGimkqsu\nhh40BGWh4QKBgQDeX6ZhPfLD1+AhiudUvYk8BoJUc5HRoKSSMbkGfgW+rLPH+pAt\nB1MONf32XI3lY8Fsq0uI9RkdVH6xTWFhQbUzFsUA6N0jC+zBcRZCIQ2YIfkN9zAj\nwy9Y6p2hgXqARyD1MMVSCOQlI1Bh8ZKAOemX05z5+D4c22d+VgCwAy1j4QKBgFCT\np7BsdTwxELN50PTBNcG9/1Lm1dhm/xjvO5ROW9d//v0Ha56vcPnF1QevhRFlP+qU\n9IBGx11GUVjVOlMgdupG0YNeELassb+HphvStN1HUBDroFF0KDtuVZfrlRI9xelZ\ngm4ksyd+mUMOWHlpgpJYlZYuHDlGW1lu876MkbfhAoGACqzo6uUxQGGoLxJrMCHJ\nbY2qPyNiURfYfGMWq5EY77v80keCvvaLlffp7yagdocdLBhGNUUp/eACCdz7JaWG\nQFKfI358J5l2f41d6IoiAWFakYOm7lwc9ELmI/dmuM1iK4UFJbqOCe0I1kM3Jw5g\nEcOEMzFu9ftfxhtf9l3GWYY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "analytics-api-service@tech-cloud-erp-1532582683650.iam.gserviceaccount.com",
+  "client_id": "112110996836327037486",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/analytics-api-service%40tech-cloud-erp-1532582683650.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
